@@ -3,19 +3,25 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { useFriendStore } from "../store/useFriendStore";
 import { useState } from "react";
+import FriendProfileModal from "./FriendProfileModal";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
   const { removeFriend } = useFriendStore();
   const [showMenu, setShowMenu] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const isOnline = onlineUsers.includes(selectedUser._id);
 
   return (
     <div className="px-4 py-3 border-b border-base-300 bg-base-100 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="relative">
+        <button
+          className="relative hover:opacity-80 transition-opacity"
+          onClick={() => setShowProfile(true)}
+          title="View profile"
+        >
           <img
             src={selectedUser.profilePic || "/avatar.png"}
             alt=""
@@ -24,13 +30,13 @@ const ChatHeader = () => {
           {isOnline && (
             <span className="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full ring-2 ring-base-100" />
           )}
-        </div>
-        <div>
-          <h3 className="font-semibold text-sm">{selectedUser.fullName}</h3>
+        </button>
+        <button className="text-left" onClick={() => setShowProfile(true)}>
+          <h3 className="font-semibold text-sm hover:text-primary transition-colors">{selectedUser.fullName}</h3>
           <p className="text-xs text-base-content/50">
             {isOnline ? <span className="text-success">Online</span> : `@${selectedUser.username}`}
           </p>
-        </div>
+        </button>
       </div>
 
       <div className="flex items-center gap-1">
@@ -65,6 +71,14 @@ const ChatHeader = () => {
           <X className="w-4 h-4" />
         </button>
       </div>
+
+      {showProfile && (
+        <FriendProfileModal
+          user={selectedUser}
+          onClose={() => setShowProfile(false)}
+          showMessage={false}
+        />
+      )}
     </div>
   );
 };

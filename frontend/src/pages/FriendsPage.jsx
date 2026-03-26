@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFriendStore } from "../store/useFriendStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { Search, UserPlus, UserCheck, UserX, Users, Clock, Send, Loader2, UserMinus } from "lucide-react";
+import FriendProfileModal from "../components/FriendProfileModal";
 
 const Avatar = ({ user, size = "sm" }) => {
   const sz = size === "sm" ? "w-10 h-10" : "w-12 h-12";
@@ -24,6 +25,7 @@ const FriendsPage = () => {
   const { onlineUsers, socket } = useAuthStore();
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState("friends"); // friends | search | pending | sent
+  const [viewingUser, setViewingUser] = useState(null);
 
   useEffect(() => {
     getFriends();
@@ -121,15 +123,24 @@ const FriendsPage = () => {
               ) : (
                 <ul className="divide-y divide-base-200">
                   {friends.map((f) => (
-                    <li key={f._id} className="flex items-center gap-3 p-4 hover:bg-base-50 transition-colors">
-                      <div className="relative">
+                    <li key={f._id} className="flex items-center gap-3 p-4 hover:bg-base-200/40 transition-colors">
+                      <button
+                        className="relative flex-shrink-0"
+                        onClick={() => setViewingUser(f)}
+                        title="View profile"
+                      >
                         <Avatar user={f} />
                         {onlineUsers.includes(f._id) && (
                           <span className="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full ring-2 ring-base-100" />
                         )}
-                      </div>
+                      </button>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{f.fullName}</div>
+                        <button
+                          className="font-medium text-sm truncate hover:text-primary transition-colors text-left w-full"
+                          onClick={() => setViewingUser(f)}
+                        >
+                          {f.fullName}
+                        </button>
                         <div className="text-xs text-base-content/50">@{f.username}</div>
                         {f.bio && <div className="text-xs text-base-content/40 truncate mt-0.5">{f.bio}</div>}
                       </div>
@@ -173,9 +184,16 @@ const FriendsPage = () => {
                 <ul className="divide-y divide-base-200">
                   {searchResults.map((u) => (
                     <li key={u._id} className="flex items-center gap-3 p-4">
-                      <Avatar user={u} />
+                      <button className="flex-shrink-0" onClick={() => setViewingUser(u)}>
+                        <Avatar user={u} />
+                      </button>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{u.fullName}</div>
+                        <button
+                          className="font-medium text-sm truncate hover:text-primary transition-colors text-left w-full"
+                          onClick={() => setViewingUser(u)}
+                        >
+                          {u.fullName}
+                        </button>
                         <div className="text-xs text-base-content/50">@{u.username}</div>
                         {u.bio && <div className="text-xs text-base-content/40 truncate">{u.bio}</div>}
                       </div>
@@ -208,9 +226,16 @@ const FriendsPage = () => {
                 <ul className="divide-y divide-base-200">
                   {pendingRequests.map((req) => (
                     <li key={req._id} className="flex items-center gap-3 p-4">
-                      <Avatar user={req.sender} />
+                      <button className="flex-shrink-0" onClick={() => setViewingUser(req.sender)}>
+                        <Avatar user={req.sender} />
+                      </button>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{req.sender?.fullName}</div>
+                        <button
+                          className="font-medium text-sm truncate hover:text-primary transition-colors text-left w-full"
+                          onClick={() => setViewingUser(req.sender)}
+                        >
+                          {req.sender?.fullName}
+                        </button>
                         <div className="text-xs text-base-content/50">@{req.sender?.username}</div>
                         {req.sender?.bio && <div className="text-xs text-base-content/40 truncate">{req.sender.bio}</div>}
                       </div>
@@ -260,6 +285,15 @@ const FriendsPage = () => {
           )}
         </div>
       </div>
+
+      {/* Friend profile modal */}
+      {viewingUser && (
+        <FriendProfileModal
+          user={viewingUser}
+          onClose={() => setViewingUser(null)}
+          showMessage={friends.some((f) => f._id === viewingUser._id)}
+        />
+      )}
     </div>
   );
 };
