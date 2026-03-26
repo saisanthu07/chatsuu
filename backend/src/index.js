@@ -33,6 +33,9 @@ const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/friends", friendRoutes);
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ message: "API route not found" });
+});
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
