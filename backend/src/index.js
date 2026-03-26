@@ -12,37 +12,41 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5001;
 
-app.use(express.json({ limit: "10mb" }));
-app.use(cookieParser());
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-}));
-
+// Allow one or more frontend origins via comma-separated FRONTEND_URL env var.
 const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
   .split(",")
-  .map((origin) => origin.trim());
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (health checks, curl, server-to-server).
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/friends", friendRoutes);
-app.use("/api/*", (req, res) => {
-  res.status(404).json({ message: "API route not found" });
-});
 
+// Backend health/root route for Render.
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Chatsuu backend is live" });
 });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-  app.get("*", (req, res) => res.sendFile(path.join(__dirname, "../frontend/dist/index.html")));
-}
+// API fallback (optional but useful for debugging wrong paths).
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ message: "API route not found" });
+});
 
 server.listen(PORT, () => {
   console.log("Server running on PORT:" + PORT);
