@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User, AtSign, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import BrandLogo from "../components/BrandLogo";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -62,9 +63,7 @@ const SignUpPage = () => {
           </Link>
           <div className="text-center">
             <div className="flex flex-col items-center gap-2">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <MessageSquare className="size-6 text-primary" />
-              </div>
+              <BrandLogo clickable={false} imageClassName="h-12 sm:h-14 w-auto" />
               <h1 className="text-2xl font-bold mt-2">Create your account</h1>
               <p className="text-base-content/60">Join chatsuu and start chatting privately</p>
             </div>

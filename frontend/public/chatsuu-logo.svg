@@ -1,0 +1,28 @@
+<svg width="990" height="280" viewBox="0 0 990 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bubbleBlue" x1="50" y1="30" x2="270" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4FA3FF"/>
+      <stop offset="1" stop-color="#1F4FC9"/>
+    </linearGradient>
+    <linearGradient id="bubbleOrange" x1="150" y1="40" x2="340" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB15C"/>
+      <stop offset="1" stop-color="#FF6A00"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(10 8)">
+    <path d="M238 80C238 37 198 4 141 4C84 4 44 37 44 80C44 112 66 140 101 153L84 199C82 204 87 208 92 206L150 177C200 173 238 140 238 80Z" fill="url(#bubbleOrange)" opacity="0.95"/>
+
+    <path d="M204 66C204 24 166 0 112 0C58 0 20 24 20 66C20 96 40 122 73 136L56 180C54 185 59 189 64 187L116 162C164 158 204 129 204 66Z" fill="url(#bubbleBlue)"/>
+
+    <ellipse cx="112" cy="70" rx="66" ry="52" fill="#FAFAFA"/>
+    <path d="M82 86C86 96 98 104 112 104C126 104 138 96 142 86" stroke="#FF7A1A" stroke-width="7" stroke-linecap="round"/>
+    <path d="M88 66C88 61 84 56 78 56C72 56 68 61 68 66" stroke="#1F66D5" stroke-width="7" stroke-linecap="round"/>
+    <path d="M156 66C156 61 152 56 146 56C140 56 136 61 136 66" stroke="#F28B2A" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(300 56)">
+    <text x="0" y="108" font-family="Poppins, Montserrat, Segoe UI, sans-serif" font-size="122" font-weight="800" fill="#0B1E4A" letter-spacing="0">chatsuu</text>
+    <text x="0" y="166" font-family="Poppins, Montserrat, Segoe UI, sans-serif" font-size="48" font-weight="500" fill="#677187" letter-spacing="2">CONNECT. CONVERSE. CHAT.</text>
+  </g>
+</svg>
