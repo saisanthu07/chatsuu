@@ -2,11 +2,15 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useFriendStore } from "../store/useFriendStore";
 import { useEffect } from "react";
-import { LogOut, MessageSquare, Settings, User, Users, Bell, Palette } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, Users, Palette } from "lucide-react";
+import BrandLogo from "./BrandLogo";
+import { useThemeStore } from "../store/useThemeStore";
+import { THEMES, THEME_SYMBOLS } from "../constants";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
   const { pendingRequests, getPendingRequests } = useFriendStore();
+  const { theme, setTheme } = useThemeStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -19,12 +23,11 @@ const Navbar = () => {
     <header className="bg-base-100 border-b border-base-300 fixed w-full top-0 z-40 backdrop-blur-lg bg-base-100/80">
       <div className="container mx-auto px-4 h-16">
         <div className="flex items-center justify-between h-full">
-          <Link to={authUser ? "/chat" : "/"} className="flex items-center gap-2.5 hover:opacity-80 transition-all">
-            <div className="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-primary" />
-            </div>
-            <h1 className="text-lg font-bold">chatsuu</h1>
-          </Link>
+          <BrandLogo
+            to={authUser ? "/chat" : "/"}
+            className="hover:opacity-80 transition-all"
+            imageClassName="h-9 sm:h-10 w-auto"
+          />
 
           <div className="flex items-center gap-1">
             {authUser ? (
@@ -70,6 +73,27 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <label data-theme={theme} className="hidden sm:flex items-center gap-2 bg-base-200 rounded-lg px-2.5 py-1.5 border border-base-300">
+                  <Palette className="w-4 h-4 text-base-content/60" />
+                  <span className="text-xs">{THEME_SYMBOLS[theme] || "◉"}</span>
+                  <select
+                    className="bg-transparent text-sm outline-none min-w-24 capitalize"
+                    value={theme}
+                    onChange={(e) => setTheme(e.target.value)}
+                    aria-label="Select theme"
+                  >
+                    {THEMES.map((t) => (
+                      <option key={t} value={t} className="capitalize">
+                        {(THEME_SYMBOLS[t] || "◉") + " " + t}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex gap-1 ml-0.5">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <div className="w-2 h-2 rounded-full bg-secondary" />
+                    <div className="w-2 h-2 rounded-full bg-accent" />
+                  </div>
+                </label>
                 <Link to="/login" className="btn btn-sm btn-ghost">Sign in</Link>
                 <Link to="/signup" className="btn btn-sm btn-primary">Get started</Link>
               </>

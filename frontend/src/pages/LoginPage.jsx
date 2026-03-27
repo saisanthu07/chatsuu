@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, MessageSquare, AtSign, ArrowLeft, Shield } from "lucide-react";
+import BrandLogo from "../components/BrandLogo";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,9 +26,7 @@ const LoginPage = () => {
           </Link>
           <div className="text-center">
             <div className="flex flex-col items-center gap-2">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <MessageSquare className="size-6 text-primary" />
-              </div>
+              <BrandLogo clickable={false} imageClassName="h-12 sm:h-14 w-auto" />
               <h1 className="text-2xl font-bold mt-2">Welcome back</h1>
               <p className="text-base-content/60">Sign in to continue your conversations</p>
             </div>

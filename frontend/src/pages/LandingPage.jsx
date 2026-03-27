@@ -3,6 +3,11 @@ import {
   MessageSquare, Users, Shield, Zap, Palette, Bell,
   Search, ArrowRight, Check, Star, Globe, Lock
 } from "lucide-react";
+import BrandLogo from "../components/BrandLogo";
+import { THEMES, THEME_SYMBOLS } from "../constants";
+import { useThemeStore } from "../store/useThemeStore";
+
+const QUICK_THEMES = ["light", "dark", "cupcake", "synthwave", "cyberpunk", "nord", "forest", "dracula", "aqua", "coffee", "sunset", "luxury", "night", "dim", "lofi", "pastel"];
 
 const FEATURES = [
   {
@@ -50,6 +55,8 @@ const TESTIMONIALS = [
 ];
 
 const LandingPage = () => {
+  const { theme, setTheme } = useThemeStore();
+
   return (
     <div className="min-h-screen bg-base-100">
       {/* Hero */}
@@ -195,17 +202,48 @@ const LandingPage = () => {
         <div className="max-w-5xl mx-auto text-center mb-10 space-y-2">
           <h2 className="text-3xl font-bold">32 themes to make it yours</h2>
           <p className="text-base-content/60">From sleek dark to vibrant synthwave — pick your vibe.</p>
+          <div className="max-w-xs mx-auto pt-2">
+            <div data-theme={theme} className="flex items-center gap-2 bg-base-100 border border-base-300 rounded-lg px-3 py-2 mb-2">
+              <span className="text-sm">{THEME_SYMBOLS[theme] || "◉"}</span>
+              <span className="text-xs text-base-content/70 capitalize flex-1 text-left">Current: {theme}</span>
+              <div className="flex gap-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                <div className="w-2.5 h-2.5 rounded-full bg-secondary" />
+                <div className="w-2.5 h-2.5 rounded-full bg-accent" />
+              </div>
+            </div>
+            <select
+              className="select select-bordered w-full capitalize"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              aria-label="Select a theme"
+            >
+              {THEMES.map((t) => (
+                <option key={t} value={t} className="capitalize">
+                  {(THEME_SYMBOLS[t] || "◉") + " " + t}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-base-content/50 mt-2">Preview themes now before creating an account.</p>
+          </div>
         </div>
         <div className="flex gap-3 justify-center flex-wrap max-w-3xl mx-auto">
-          {["light","dark","cupcake","synthwave","cyberpunk","nord","forest","dracula","aqua","coffee","sunset","luxury","night","dim","lofi","pastel"].map((t) => (
-            <div key={t} data-theme={t} className="flex items-center gap-1.5 bg-base-100 border border-base-300 rounded-full px-3 py-1.5 cursor-default">
+          {QUICK_THEMES.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTheme(t)}
+              data-theme={t}
+              className={`flex items-center gap-1.5 bg-base-100 border rounded-full px-3 py-1.5 transition-all hover:scale-105 ${theme === t ? "border-primary ring-2 ring-primary/20" : "border-base-300"}`}
+            >
+              <span className="text-xs">{THEME_SYMBOLS[t] || "◉"}</span>
               <div className="flex gap-0.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                 <div className="w-2.5 h-2.5 rounded-full bg-secondary" />
                 <div className="w-2.5 h-2.5 rounded-full bg-accent" />
               </div>
               <span className="text-xs font-medium capitalize">{t}</span>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -260,8 +298,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-base-300 text-center text-sm text-base-content/40">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <MessageSquare className="w-4 h-4 text-primary" />
-          <span className="font-bold text-base-content/60">chatsuu</span>
+          <BrandLogo to="/" imageClassName="h-8 w-auto" />
         </div>
         <p>© {new Date().getFullYear()} chatsuu · Built with privacy in mind</p>
       </footer>
